@@ -1,0 +1,10 @@
+.game { text-align: center; margin-top: 50px; }
+.board { 
+  display: grid; 
+  grid-template-columns: repeat(3, 80px); 
+  gap: 5px; 
+  justify-content: center; 
+  margin: 20px 0;
+}
+.board button { height: 80px; font-size: 2rem; cursor: pointer; }
+.status { font-size: 1.5rem; margin-bottom: 10px; }
