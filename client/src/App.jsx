@@ -6,12 +6,20 @@ function App() {
   const [isXNext, setIsXNext] = useState(true);
 
   const handleClick = (i) => {
-    if (board[i] || calculateWinner(board)) return;
-    const newBoard = board.slice();
-    newBoard[i] = isXNext ? 'X' : 'O';
-    setBoard(newBoard);
-    setIsXNext(!isXNext);
-  };
+  if (board[i] || calculateWinner(board)) return;
+  const newBoard = board.slice();
+  newBoard[i] = isXNext ? 'X' : 'O';
+  setBoard(newBoard);
+  setIsXNext(!isXNext);
+
+  // Проверяем победителя после хода
+  const winner = calculateWinner(newBoard);
+  if (winner) {
+    saveResult(winner); // сохраняем "X" или "O"
+  } else if (newBoard.every(cell => cell !== null)) {
+    saveResult("draw"); // сохраняем ничью
+  }
+};
 
   const winner = calculateWinner(board);
   const status = winner ? `Победитель: ${winner}` : `Следующий ход: ${isXNext ? 'X' : 'O'}`;
@@ -40,3 +48,14 @@ function calculateWinner(squares) {
 }
 
 export default App;
+
+const saveResult = async (result) => {
+  await fetch("http://localhost:5000/save-result", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ result }),
+  });
+};
+
